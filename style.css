@@ -1,0 +1,421 @@
+/* Variables */
+:root {
+    --run-color: #DD5E56;
+    --bike-color: #F4A261;
+    --lift-color: #457B9D;
+    --yoga-color: #2A9D8F;
+    --walk-color: #6D6875;
+    --coffee-color: #8E7DBE;
+    --text-color: #333;
+    --background-color: #fff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.5s ease-in-out;
+    --placeholder-color: #EAEAEA;
+}
+
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background-color var(--transition);
+}
+
+/* Header */
+.main-header {
+    background: #000;
+    padding: 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    height: 40px;
+    filter: brightness(0) invert(1);
+}
+
+/* Footer */
+.main-footer {
+    background: #000;
+    padding: 1rem;
+    text-align: center;
+    margin-top: auto;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.main-footer a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    transition: var(--transition);
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.main-footer a:hover {
+    opacity: 1;
+}
+
+.main-footer p {
+    margin: 0;
+    opacity: 0.8;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 80px auto 0;
+    padding: 2rem;
+    flex: 1;
+    position: relative;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* Screen Management */
+.screen {
+    display: none;
+    flex: 1;
+    padding-top: 20px;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Activity Selection Screen */
+#activity-selection {
+    text-align: center;
+}
+
+#activity-selection h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 3rem;
+}
+
+.activities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.activity-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    cursor: pointer;
+    transition: transform 0.5s ease-in-out, box-shadow 0.3s ease, opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.activity-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.activity-card.selected {
+    transform: scale(1.1);
+    opacity: 0;
+    z-index: 10;
+}
+
+.activity-card .emoji {
+    font-size: 3rem;
+}
+
+.activity-card .name {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Back Button */
+.back-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    text-decoration: underline;
+    opacity: 0.8;
+    transition: var(--transition);
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 100;
+}
+
+.back-btn:hover {
+    opacity: 1;
+}
+
+/* Form Screen */
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    color: white;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid white;
+    border-radius: 6px;
+    font-family: inherit;
+    background: transparent;
+    color: white;
+}
+
+input::placeholder, textarea::placeholder {
+    color: var(--placeholder-color);
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-width: 2px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Calendar Styles */
+.flatpickr-calendar {
+    background: var(--current-color);
+    color: white;
+}
+
+.flatpickr-day {
+    color: white;
+}
+
+.flatpickr-day:hover,
+.flatpickr-day:focus,
+.flatpickr-day.selected,
+.flatpickr-day.selected:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: transparent;
+}
+
+.flatpickr-current-month .flatpickr-month,
+.flatpickr-current-month .flatpickr-year {
+    color: white;
+}
+
+.flatpickr-weekdays label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.flatpickr-weekdaycontainer .flatpickr-weekday {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.numInputWrapper span.arrowUp::after,
+.numInputWrapper span.arrowDown::after {
+    border-bottom-color: white;
+    border-top-color: white;
+}
+
+.flatpickr-time .flatpickr-am-pm,
+.flatpickr-time input {
+    color: white;
+}
+
+/* Time Slots */
+.time-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.time-slot-btn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+    padding: 0.5rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.time-slot-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.time-slot-btn.selected {
+    background: white;
+    color: var(--current-color);
+    font-weight: 600;
+}
+
+/* Map Preview Placeholder */
+#map-preview {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 6px;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit-btn {
+    background: white;
+    color: var(--current-color);
+    border: 2px solid white;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: var(--transition);
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.submit-btn:hover {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Preview Card */
+.preview-card {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    color: var(--text-color);
+}
+
+.preview-icon {
+    font-size: 3rem;
+}
+
+.preview-details h3 {
+    margin-bottom: 0.5rem;
+}
+
+/* Confirmation Screen */
+.confirmation-container {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    color: white;
+}
+
+.confirmation-container .preview-card {
+    color: var(--text-color);
+}
+
+.share-btn {
+    background: white;
+    color: var(--current-color);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: var(--transition);
+}
+
+.share-btn:hover {
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Success Animation */
+@keyframes successCheck {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.submit-btn.success-check {
+    animation: successCheck 0.5s ease-out;
+}
+
+/* Activity-specific colors */
+.activity-card[data-activity="run"] { background-color: var(--run-color); color: white; }
+.activity-card[data-activity="bike"] { background-color: var(--bike-color); color: white; }
+.activity-card[data-activity="lift"] { background-color: var(--lift-color); color: white; }
+.activity-card[data-activity="yoga"] { background-color: var(--yoga-color); color: white; }
+.activity-card[data-activity="walk"] { background-color: var(--walk-color); color: white; }
+.activity-card[data-activity="coffee"] { background-color: var(--coffee-color); color: white; }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        margin-top: 60px;
+    }
+
+    #activity-selection h1 {
+        font-size: 2rem;
+    }
+
+    .activities-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .preview-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .form-container {
+        padding: 0 1rem;
+    }
+} 

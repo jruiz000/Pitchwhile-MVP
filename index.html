@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pitchwhile - Pitch your startup while exercising</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/500_Global_Logo.svg/1200px-500_Global_Logo.svg.png" alt="500 Global Logo" class="logo">
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Activity Selection Screen -->
+        <section id="activity-selection" class="screen active">
+            <h1>Pitch me your startup while we...</h1>
+            <h2 class="subtitle">Elige cómo quieres presentar tu pitch</h2>
+            <div class="activities-grid">
+                <!-- Activity cards will be dynamically inserted here -->
+            </div>
+        </section>
+
+        <!-- Form Screen -->
+        <section id="form-screen" class="screen">
+            <button class="back-btn">← Back</button>
+            <div class="form-container">
+                <h2 id="activity-title"></h2>
+                
+                <!-- Preview Card -->
+                <div class="preview-card">
+                    <div class="preview-icon"></div>
+                    <div class="preview-details">
+                        <h3 id="preview-activity"></h3>
+                        <p id="preview-location">Select a location</p>
+                        <p id="preview-time">Select a time</p>
+                        <p id="preview-startup">Enter your startup details</p>
+                    </div>
+                </div>
+
+                <form id="pitch-form">
+                    <!-- Location Section -->
+                    <div class="form-section">
+                        <h3>¿Dónde te gustaría hacerlo?</h3>
+                        <input type="text" id="location" placeholder="Enter location" required>
+                        <div id="map-preview" style="width: 100%; height: 200px; background-color: #eee; text-align: center; line-height: 200px; color: #555;">Map Preview Placeholder</div>
+                    </div>
+
+                    <!-- Calendar Section -->
+                    <div class="form-section">
+                        <h3>¿Cuándo puedes?</h3>
+                        <input type="text" id="datetime" placeholder="Select date" required>
+                        <div id="time-slots" class="time-slots"></div>
+                    </div>
+
+                    <!-- Founder Details Section -->
+                    <div class="form-section">
+                        <h3>Datos del Founder</h3>
+                        <input type="text" id="founder-name" placeholder="Nombre completo" required>
+                        <input type="text" id="startup-name" placeholder="Nombre de la startup" required>
+                        <textarea id="one-liner" placeholder="One-liner (máx 200 caracteres)" maxlength="200" required></textarea>
+                        <input type="url" id="startup-url" placeholder="URL (opcional): sitio web o pitch deck">
+                        <textarea id="investor-question" placeholder="Pregunta opcional para el inversionista"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">Enviar Pitch + Solicitud de Actividad</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Confirmation Screen -->
+        <section id="confirmation-screen" class="screen">
+            <button class="back-btn">← Back</button>
+            <div class="confirmation-container">
+                <h2 id="confirmation-title"></h2>
+                <div class="preview-card">
+                    <!-- Preview details will be copied from form -->
+                </div>
+                
+                <button id="share-btn" class="share-btn">Compartir esta experiencia</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <a href="https://www.linkedin.com/in/jruiz000/" target="_blank" rel="noopener noreferrer">
+            Powered by José Andrés Ruiz de Muralia.mx
+        </a>
+        <p>Iniciativa creada por René Lomelí, Partner en 500 Global</p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    
+    <script src="js/script.js"></script>
+</body>
+</html> 
