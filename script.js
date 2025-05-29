@@ -62,19 +62,39 @@ let selectedTime = null;
 // Initialize map
 let map;
 let marker;
-let searchTimeout;
+let autocomplete;
 
-function initMap() {
+function initializeMap() {
     // Initialize map centered on CDMX
-    map = L.map('map-preview').setView([19.4326, -99.1332], 13);
-    
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    map = new google.maps.Map(mapPreview, {
+        center: { lat: 19.4326, lng: -99.1332 }, // CDMX coordinates
+        zoom: 13,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false
+    });
 
-    // Initialize marker
-    marker = L.marker([19.4326, -99.1332]).addTo(map);
+    // Initialize Autocomplete
+    autocomplete = new google.maps.places.Autocomplete(locationInput, {
+        types: ['geocode'], // Restrict to geocode results
+        componentRestrictions: { country: 'mx' }, // Restrict to Mexico
+        fields: ['place_id', 'geometry', 'name', 'formatted_address']
+    });
+
+    // Add listener for place selection
+    autocomplete.addListener('place_changed', function() {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) {
+            // User entered the name of a Place that was not suggested and pressed the Enter key,
+            // or the Place Details request failed. Show a message to the user.
+            console.error("No details available for input: '" + place.name + "'");
+            return;
+        }
+
+        // If the place has a geometry, then present it on a map.
+        updateMap(place.geometry.location.lat(), place.geometry.location.lng());
+        updateLocationPreview(place.formatted_address);
+    });
 }
 
 // Initialize the application
@@ -82,7 +102,6 @@ function init() {
     renderActivities();
     initializeCalendar();
     setupEventListeners();
-    initMap();
 }
 
 // Render activity cards
@@ -132,7 +151,15 @@ function selectActivity(activity) {
     selectedTime = null;
     locationInput.value = '';
     previewLocation.textContent = 'Select a location';
-    mapPreview.textContent = 'Map Preview Placeholder'; // Reset map preview text
+
+    // Reset the map to the initial CDMX view when activity is re-selected
+    if (map) {
+        map.setCenter({ lat: 19.4326, lng: -99.1332 });
+        map.setZoom(13);
+        if (marker) {
+            marker.setMap(null); // Remove existing marker
+        }
+    }
 }
 
 // Initialize Calendar
@@ -184,18 +211,7 @@ function setupEventListeners() {
     document.getElementById('founder-name').addEventListener('input', updatePreview);
     document.getElementById('startup-name').addEventListener('input', updatePreview);
     document.getElementById('one-liner').addEventListener('input', updatePreview);
-    locationInput.addEventListener('input', function(e) {
-        console.log('Location input event fired', e.target.value);
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            const query = e.target.value;
-            if (query.length > 3) {
-                console.log('Searching for:', query);
-                searchLocation(query);
-            }
-        }, 500);
-    });
-    
+
     // Handle form submission
     pitchForm.addEventListener('submit', handleFormSubmit);
 
@@ -235,19 +251,8 @@ function updatePreview() {
 }
 
 // Update location preview and map placeholder
-function updateLocationPreview() {
-    const locationValue = locationInput.value;
-    previewLocation.textContent = locationValue || 'Select a location';
-    if (locationValue) {
-        // For a basic MVP without API, just display the text in the map preview
-        mapPreview.textContent = `Location: ${locationValue}`; 
-        // If you wanted to try a static map image, you could construct a URL here
-        // using a service like OpenStreetMap's static map, but it's limited.
-        // Example (requires more robust URL encoding and handling): 
-        // mapPreview.innerHTML = `<img src="https://www.openstreetmap.org/staticmap?center=0,0&zoom=1&size=200x200&marker=0,0&mml=${encodeURIComponent(locationValue)}" alt="Map preview">`;
-    } else {
-        mapPreview.textContent = 'Map Preview Placeholder';
-    }
+function updateLocationPreview(address) {
+    previewLocation.textContent = address || 'Select a location';
 }
 
 // Handle form submission
@@ -257,8 +262,8 @@ function handleFormSubmit(e) {
     // Get form data
     const formData = {
         activity: previewActivity.textContent,
-        location: previewLocation.textContent, // This now comes from the simple input
-        time: previewTime.textContent, // This will now include date and selected time
+        location: previewLocation.textContent, // Use the updated location from Google Places
+        time: previewTime.textContent,
         founder: document.getElementById('founder-name').value,
         startup: document.getElementById('startup-name').value,
         oneLiner: document.getElementById('one-liner').value,
@@ -298,7 +303,15 @@ function handleBack() {
         previewLocation.textContent = 'Select a location';
         previewTime.textContent = 'Select a time';
         previewStartup.textContent = 'Enter your startup details';
-        mapPreview.textContent = 'Map Preview Placeholder';
+
+        // Reset the map to the initial CDMX view when going back
+        if (map) {
+            map.setCenter({ lat: 19.4326, lng: -99.1332 });
+            map.setZoom(13);
+             if (marker) {
+                marker.setMap(null); // Remove existing marker
+            }
+        }
         selectedTime = null;
     } else if (confirmationScreen.classList.contains('active')) {
         confirmationScreen.classList.remove('active');
@@ -325,53 +338,24 @@ function handleShare() {
     }
 }
 
-// Initialize map when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    initMap();
+// New Google Maps update map function
+function updateMap(lat, lng) {
+    const newLocation = { lat: lat, lng: lng };
     
-    // Add event listener for location input
-    const locationInput = document.getElementById('location');
-    locationInput.addEventListener('input', function(e) {
-        console.log('Location input event fired', e.target.value);
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(() => {
-            const query = e.target.value;
-            if (query.length > 3) {
-                console.log('Searching for:', query);
-                searchLocation(query);
-            }
-        }, 500);
-    });
-});
-
-async function searchLocation(query) {
-    console.log('searchLocation called with query:', query);
-    try {
-        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query + ', Ciudad de México, México')}&limit=1`);
-        console.log('Nominatim API response:', response);
-        const data = await response.json();
-        console.log('Nominatim API data:', data);
-        
-        if (data && data.length > 0) {
-            const { lat, lon } = data[0];
-            console.log('Location found:', lat, lon);
-            updateMap(lat, lon);
-        } else {
-            console.log('No location found for query:', query);
-        }
-    } catch (error) {
-        console.error('Error searching location:', error);
+    // Update marker position or create new one
+    if (marker) {
+        marker.setPosition(newLocation);
+    } else {
+        marker = new google.maps.Marker({
+            position: newLocation,
+            map: map,
+        });
     }
-}
-
-function updateMap(lat, lon) {
-    console.log('updateMap called with:', lat, lon);
-    // Update marker position
-    marker.setLatLng([lat, lon]);
     
-    // Center map on new location
-    map.setView([lat, lon], 15);
+    // Center map on new location and adjust zoom
+    map.setCenter(newLocation);
+    map.setZoom(15); // Adjust zoom level as needed
 }
 
-// Initialize the app when the DOM is loaded
+// Initialize the app when the DOM is loaded - Google Maps API script calls initializeMap now
 document.addEventListener('DOMContentLoaded', init); 
