@@ -184,8 +184,18 @@ function setupEventListeners() {
     document.getElementById('founder-name').addEventListener('input', updatePreview);
     document.getElementById('startup-name').addEventListener('input', updatePreview);
     document.getElementById('one-liner').addEventListener('input', updatePreview);
-    locationInput.addEventListener('input', updateLocationPreview); // Add listener for location input
-
+    locationInput.addEventListener('input', function(e) {
+        console.log('Location input event fired', e.target.value);
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+            const query = e.target.value;
+            if (query.length > 3) {
+                console.log('Searching for:', query);
+                searchLocation(query);
+            }
+        }, 500);
+    });
+    
     // Handle form submission
     pitchForm.addEventListener('submit', handleFormSubmit);
 
