@@ -6,15 +6,9 @@ A single-page web application that allows founders to select a physical activity
 
 - Interactive activity selection cards
 - Dynamic form based on selected activity
-- Google Places Autocomplete integration
+- Address autocomplete and map preview using Leaflet.js and OpenStreetMap data (Nominatim)
 - Calendar integration with Flatpickr
 - Responsive design for mobile and desktop
-
-## Setup
-
-1. Clone this repository
-2. Open `index.html` in your browser
-3. No build process required - it's pure HTML, CSS, and JavaScript
 
 ## Customization
 
@@ -46,7 +40,8 @@ Activity colors can be modified in the CSS variables in `css/style.css`:
 
 ## Dependencies
 
-- Google Places API (for location autocomplete)
+- Leaflet.js (for interactive maps)
+- Nominatim (OpenStreetMap's geocoding service for address search)
 - Flatpickr (for calendar functionality)
 - Inter font (via Google Fonts)
 
